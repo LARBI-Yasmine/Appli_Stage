@@ -1,3 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-    background-color: lightgray;
+    background-color: rgb(226, 221, 221);
+}
+
+.footer {
+
+    text-align: center;
+    padding: 1em;
+    /* Utilisation d'unités relatives */
+    font-size: 1em;
+    /* Taille de police relative */
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 2em;
+        /* Augmente le padding sur les écrans plus petits */
+        font-size: 0.9em;
+        /* Ajuste la taille de police */
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 1.5em;
+        /* Ajuste le padding encore plus pour les très petits écrans */
+        font-size: 0.8em;
+        /* Réduit la taille de police pour s'adapter aux petits écrans */
+    }
+
+}
+
+.content {
+    flex: 1;
 }
