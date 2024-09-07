@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de l'objet
+{% endblock %}
+
+{% block body %}
+	<div class="container my-5">
+		<h2 class="text-center mb-4">{{ objet.nom|capitalize }}</h2>
+
+		<div class="row justify-content-center">
+			<div class="col-md-8 col-lg-6">
+				<div class="card shadow-sm border-light">
+					<img src="{{ asset('asset/img/pcc-666b1798df68d.png') }}" class="card-img-top" alt="{{ objet.nom }}">
+
+					<div class="card-body">
+						<h5 class="card-title">Détails de l'objet</h5>
+
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">
+								<strong>Numéro de série :</strong>
+								{{ objet.numSerie }}
+							</li>
+							<li class="list-group-item">
+								<strong>État d'usure :</strong>
+								{{ objet.etatUsure }}
+							</li>
+							<li class="list-group-item">
+								<strong>Catégorie :</strong>
+								{{ objet.categorie }}
+							</li>
+							<li class="list-group-item">
+								<strong>Disponibilité :</strong>
+								{{ objet.disponibilite }}
+							</li>
+							<li class="list-group-item">
+								<strong>Enregistré le :</strong>
+								{{ objet.createdAt|date('d-M-Y à H:i:s') }}
+							</li>
+						</ul>
+					</div>
+
+					<div class="card-footer text-center">
+						<a href="{{ path('app_objet') }}" class="btn btn-outline-dark me-2">Retour</a>
+						<a href="{{ path('app_objet_edit', {'id': objet.id}) }}" class="btn btn-outline-primary me-2">Modifier</a>
+
+						<form method="post" action="{{ path('app_objet_delete', {'id': objet.id}) }}" class="d-inline delete-form" data-objet="{{ objet.nom }}">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ objet.id) }}">
+							<button type="submit" class="btn btn-outline-danger">Supprimer</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.delete-form').forEach(function (form) {
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+const objet = form.getAttribute('data-objet');
+
+Swal.fire({
+title: 'Êtes-vous sûr ?',
+text: `Vous êtes sur le point de supprimer ${objet}. Cette action est irréversible !`,
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Oui, supprimer !',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.isConfirmed) {
+form.submit();
+}
+});
+});
+});
+});
+	</script>
+{% endblock %}

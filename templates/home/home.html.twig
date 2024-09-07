@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Objets
+{% endblock %}
+
+{% block body %}
+	<h2 class="font-weight-normal posi mt-4 mb-3" style="text-align: center;">Matériel à réserver</h2><br>
+	<div
+		class="container">
+
+		<!-- Notifications -->
+		{% if (app.user) %}
+			<button type="button" class="btn btn-primary position-relative dropdown-toggle" id="notificationDropdown" data-toggle="dropdown" aria-expanded="false">
+				Notifications
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+					({{ notifications|length }})
+					<span class="visually-hidden">Non lue(s)</span>
+				</span>
+			</button>
+
+			{% if is_granted('ROLE_ADMIN') %}
+				<ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+					{% for notification in notifications %}
+						<li class="dropdown-item">
+							<a href="{{ path('app_notification_read', {'id': notification.id}) }}">
+								<div class="alert alert-danger" role="alert">
+									{{ notification.contenu }}
+									<h5>
+										<span class="badge bg-secondary">Le
+											{{ notification.createdAt|date('d-m-Y à H:i') }}</span>
+									</h5>
+								</div>
+							</a>
+						</li>
+					{% else %}
+						<li class="dropdown-item">
+							<div class="alert alert-primary" role="alert">
+								Aucune nouvelle notification
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+
+			{% if is_granted('ROLE_USER') %}
+				<ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+					{% for notification in notifications %}
+						<li class="dropdown-item">
+							<a href="{{ path('app_reservations', {'id': notification.id}) }}">
+								<div class="alert alert-danger" role="alert">
+									{{ notification.contenu }}
+									<h5>
+										<span class="badge bg-secondary">Le
+											{{ notification.createdAt|date('d-m-Y à H:i') }}</span>
+									</h5>
+								</div>
+							</a>
+						</li>
+					{% else %}
+						<li class="dropdown-item">
+							<div class="alert alert-primary" role="alert">
+								Aucune nouvelle notification
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		{% endif %}
+
+		<div class="row">
+			{% for objet in objets %}
+				<div class="col-4">
+					<div class="card shadow p-3 mt-3 mb-3 bg-body rounded">
+						<img src="{{ asset('asset/img/pcc-666b1798df68d.png') }}" class="card-img-top" width="60rem" height="120rem" alt="{{ objet.nom }}">
+						<div class="card-body">
+							<h4 class="card-title" style="text-align: center;">{{ objet.nom }}&nbsp;&nbsp;</h4><br>
+							<div class="card-text">
+								{% if not app.user %}
+									<span class="d-flex justify-content-center">
+										<a href="{{ path('app_login') }}">
+											<button type="button" class="btn btn-outline-primary">Réserver</button>
+										</a>
+									</span>
+								{% elseif objet.disponibilite == 'Disponible' %}
+									{% if app.user and not is_granted('ROLE_ADMIN') and objet.nom == 'imprimante 3D' %}
+										<!-- Button alert -->
+										<span class="d-flex justify-content-center">
+											<button type="button" class="btn btn-outline-primary" onclick="showPrinterReservationAlert();">Réserver</button>
+										</span>
+
+									{% else %}
+										<form method="POST" class="d-flex justify-content-center reservation-form" data-id="{{ objet.id }}" action="{{ path('app_reservation_new', {'id': objet.id}) }}">
+											<button type="submit" class=" d-flex justify-content-center  btn btn-outline-primary">Réserver</button>
+											<input type="hidden" name="token" value="{{ csrf_token('reservation' ~ objet.id) }}">
+											<input type="hidden" name="id" value="{{ objet.id }}">
+										</form>
+									{% endif %}
+								{% else %}
+									<span class="d-flex justify-content-center">
+										<button type="button" class="btn btn-secondary" disabled>Réservé</button>
+									</span>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<!-- Pagination -->
+		<div class="d-flex justify-content-center">
+			{{ knp_pagination_render(objets) }}
+		</div>
+
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.delete-form').forEach(function (form) {
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+const objet = form.getAttribute('data-objet');
+
+Swal.fire({
+title: 'Êtes-vous sûr?',
+text: `Vous êtes sur le point de supprimer ${objet}. Cette action est irréversible!`,
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Oui, supprimer!',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.isConfirmed) {
+form.submit();
+}
+});
+});
+});
+});
+
+function showPrinterReservationAlert() {
+Swal.fire({
+icon: 'error',
+title: '<span style="color: red;">Réservation impossible</span>',
+html: '<p style="color: black;font-size:16px;">Pour pouvoir réserver ce matériel, la présence d\'un intervenant est requise.</p>',
+confirmButtonText: 'OK',
+customClass: {
+confirmButton: 'btn btn-primary' // Utiliser la classe Bootstrap 'btn-primary' pour le bouton OK
+}
+});
+
+
+}
+	</script>
+{% endblock %}

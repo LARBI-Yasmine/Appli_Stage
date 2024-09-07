@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Retour de l'objet
+{% endblock %}
+
+{% block body %}
+
+
+	<div class="container mt-5">
+		<h2 class="font-weight-normal justify-content-center mt-5" style="text-align: center;">Faire un Retour
+		</h2><br>
+		<div class="row justify-content-center">
+
+			<div class="col-md-6 shadow ">
+
+				{{ form_start(form) }}
+
+				<div class="form-group mt-4">
+					{{ form_label(form.returnDate) }}
+					{{ form_widget(form.returnDate, {'attr': {'class': 'form-control', 'id': 'returnDate'}}) }}
+					{% if form_errors(form.returnDate) %}
+						<div class="alert alert-danger mt-2">
+							{{ form_errors(form.returnDate) }}
+						</div>
+					{% endif %}
+				</div>
+
+				<div class="form-group mt-4">
+					{{ form_label(form.objectStatus) }}
+					{{ form_widget(form.objectStatus, {'attr': {'class': 'form-control', 'id': 'objectStatus'}}) }}
+					{% if form_errors(form.objectStatus) %}
+						<div class="alert alert-danger mt-2">
+							{{ form_errors(form.objectStatus) }}
+						</div>
+					{% endif %}
+				</div>
+
+				<div></div><br>
+				<div class="d-flex justify-content-center">
+					<button type="submit" class="btn btn-outline-primary">Envoyer</button>&nbsp;
+					<a href="{{ path('app_reservations') }}">
+						<button type="button" class="btn btn-outline-dark" style="width:6rem;">Retour</button>
+					</a>
+				</div>
+				<div></div><br>
+
+				{{ form_end(form) }}
+
+			</div>
+
+		</div>
+
+	</div>
+
+{% endblock %}
