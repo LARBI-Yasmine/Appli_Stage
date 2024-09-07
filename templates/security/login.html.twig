@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion
+{% endblock %}
+
+
+{% block body %}
+	<div class="container mt-3 mb-3">
+		<div class="row justify-content-center">
+			<div class="col-md-6 col-lg-5 shadow-lg p-4 rounded bg-white">
+				<div class="text-center">
+					<img src="{{ asset('asset/img/materiel-informatique.jpg') }}" class="img-fluid rounded-circle mb-3" alt="Logo" width="180" height="150">
+					<h2 class="mb-4">Se connecter</h2>
+				</div>
+
+				{% if error %}
+					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+				{% endif %}
+
+				<form method="post">
+					<div class="form-floating mb-3">
+						<label for="inputEmail">Adresse Email :</label>
+						<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="email@myges.fr" autocomplete="email" required autofocus>
+
+					</div>
+
+					<div class="form-floating mb-3">
+						<label for="inputPassword">Mot de passe :</label>
+						<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Mot de passe" autocomplete="current-password" required>
+
+					</div>
+
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<a href="{{ path('app_request_password') }}" class="link-primary">Mot de passe oublié?</a>
+					</div>
+
+					<div class="d-grid">
+						<button type="submit" class="btn btn-outline-primary btn-block">Se Connecter</button>
+					</div>
+				</form>
+
+				<p class="text-center mt-3 mb-0">
+					Pas encore de compte ?
+					<a href="/inscription" class="link-primary">Créez en un</a>
+				</p>
+			</div>
+		</div>
+	</div>
+{% endblock %}
