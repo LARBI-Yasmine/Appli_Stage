@@ -61,7 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifications = new ArrayCollection();
         $this->createdAt =(new DateTime('now'));
         $this->isVerified =false;
-        $this->tokenRegistrationLifeTime = (new DateTime('now + 24 hours' ));
+        //$this->tokenRegistrationLifeTime = (new DateTime('now + 24 hours' ));
+        $this->tokenRegistrationLifeTime = (new DateTime('now'))->add(new DateInterval('PT24H'));
+
     }
 
     public function getId(): ?int
@@ -158,7 +160,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles =  $this->roles ;
-        $roles[]='ROLE_USER';
+      //  $roles[]='ROLE_USER';
         return  array_unique ($roles);
     }
 
