@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer Utilisateur
+{% endblock %}
+
+{% block body %}
+	<div
+		class="container mt-5">
+		<!-- Titre de la page -->
+		<h2 class="text-center mb-4">Éditer l'utilisateur</h2>
+
+		<div class="row justify-content-center">
+			<div class="col-md-8 col-lg-6">
+				<div class="card shadow-sm">
+					<div
+						class="card-body">
+						<!-- Afficher le prénom et le nom de l'utilisateur dans l'en-tête de la carte -->
+						<h5 class="card-title text-center mb-4">
+							{{ user.firstname|capitalize }}
+							{{ user.lastname|capitalize }}
+						</h5>
+
+						<!-- Démarrer le formulaire -->
+						{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+						<!-- Afficher le formulaire -->
+						<div class="mb-3">
+							{{ form_widget(form) }}
+						</div>
+
+						<!-- Boutons de soumission et retour -->
+						<div class="d-flex justify-content-center">
+							<button type="submit" class="btn btn-outline-primary">
+								Enregistrer
+							</button>&nbsp;&nbsp;
+							<a href="{{ path('app_utilisateurs') }}" class="btn btn-outline-dark">
+								Retour
+							</a>&nbsp;&nbsp;
+
+						</div>
+
+						<!-- Fin du formulaire -->
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

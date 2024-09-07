@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les Réservations
+{% endblock %}
+
+{% block body %}
+	<div class="container my-5">
+		<h2 class="text-center mb-4">Gérer les Réservations</h2>
+
+		<div class="card shadow-sm border-light">
+			<div class="card-body">
+				<table class="table table-hover align-middle">
+					<thead class="table-dark">
+						<tr>
+							<th>Utilisateur</th>
+							<th>Matériel</th>
+							<th>Date de début</th>
+							<th>Date de fin</th>
+							<th>Statut</th>
+							<th class="text-center">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for reservation in reservations %}
+							<tr>
+								<td>{{ reservation.user.firstname }}
+									{{ reservation.user.lastname }}</td>
+								<td>{{ reservation.objet.nom }}</td>
+								<td>{{ reservation.dateDebut|date('d-m-Y') }}</td>
+								<td>{{ reservation.dateFin|date('d-m-Y') }}</td>
+								<td>
+									{% if reservation.statut == 'Demande Approuvée' %}
+										<span class="badge bg-success">{{ reservation.statut }}</span>
+									{% elseif reservation.statut == 'en attente' %}
+										<span class="badge bg-warning text-dark">{{ reservation.statut }}</span>
+									{% elseif reservation.statut == 'Demande Refusée' %}
+										<span class="badge bg-danger">{{ reservation.statut }}</span>
+									{% elseif reservation.statut == 'Objet Retourné' %}
+										<span class="badge bg-primary">{{ reservation.statut }}</span>
+									{% endif %}
+								</td>
+								<td class="text-center">
+									{% if reservation.statut == 'en attente' %}
+										<a href="{{ path('app_reservation_approve', { id: reservation.id }) }}" class="btn btn-success btn-sm me-2">
+											<i class="fas fa-check"></i>
+											Approuver
+										</a>
+										<a href="{{ path('app_reservation_reject', { id: reservation.id }) }}" class="btn btn-danger btn-sm">
+											<i class="fas fa-times"></i>
+											Refuser
+										</a>
+									{% endif %}
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="6" class="text-center text-muted">Aucune réservation trouvée</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

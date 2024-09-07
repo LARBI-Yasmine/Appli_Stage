@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition du profil
+{% endblock %}
+
+{% block body %}
+
+	<div class="container mt-1 mb-3">
+		<h1 class="text-center">Modifier mon profil</h1><br>
+		<div class="row justify-content-center">
+
+			<div class="col-md-6 shadow">
+
+
+				{{ form_start(form) }}
+				{{ form_widget(form) }}
+				<div></div><br>
+				<div class="d-flex justify-content-center">
+					<button type="submit" class="btn btn-outline-primary ">Modifier</button>
+				</div>
+
+				<div></div><br>
+				{{ form_end(form) }}
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

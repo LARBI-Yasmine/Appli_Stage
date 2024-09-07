@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Utilisateurs
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-3 mb-3">
+		<h2 class="text-center mb-4">Gestion des Utilisateurs</h2>
+
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<a href="{{ path('app_user_new') }}" class="btn btn-outline-primary">
+				<i class="bi bi-plus-circle"></i>
+				+ Nouveau Utilisateur
+			</a>
+			<input type="text" class="form-control w-25" id="searchInput" placeholder="Rechercher...">
+		</div>
+
+		<div class="card shadow-sm">
+			<div class="card-body">
+				<table class="table table-hover">
+					<thead class="table-dark">
+						<tr>
+							<th scope="col">Nom</th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Email</th>
+							<th scope="col">Role</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody id="userTable">
+						{% for user in pagination %}
+							<tr>
+								<td>{{ user.firstname }}</td>
+								<td>{{ user.lastname }}</td>
+								<td>{{ user.email }}</td>
+								<td>
+									{% for role in user.roles %}
+										{% if role == 'ROLE_USER' %}
+											Utilisateur
+										{% elseif role == 'ROLE_ADMIN' %}
+											Admin
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									<a href="{{ path('app_utilisateur_detail', {'id': user.id}) }}" class="btn btn-outline-warning btn-sm">
+										<i class="bi bi-pencil-square"></i>
+										&nbsp;&nbsp;Détail&nbsp;&nbsp;
+									</a>
+									<form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" class="d-inline delete-form" data-user="{{ user.firstname }} {{ user.lastname }}">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+										<button class="btn btn-outline-danger btn-sm">
+											<i class="bi bi-trash"></i>
+											Supprimer
+										</button>
+									</form>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="5" class="text-center">Aucun utilisateur trouvé</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+
+			</div>
+
+		</div>
+		<!-- Pagination Controls -->
+		<div class="pagination justify-content-center mt-2">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () { // Delete confirmation
+document.querySelectorAll('.delete-form').forEach(function (form) {
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+const user = form.getAttribute('data-user');
+
+Swal.fire({
+title: 'Êtes-vous sûr?',
+text: `Vous êtes sur le point de supprimer ${user}. Cette action est irréversible!`,
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Oui, supprimer!',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.isConfirmed) {
+form.submit();
+}
+});
+});
+});
+
+// Filter functionality
+const searchInput = document.getElementById('searchInput');
+const userTable = document.getElementById('userTable');
+
+searchInput.addEventListener('input', function () {
+const filter = searchInput.value.toLowerCase();
+const rows = userTable.querySelectorAll('tr');
+
+rows.forEach(row => {
+const columns = row.querySelectorAll('td');
+let match = false;
+columns.forEach(column => {
+if (column.textContent.toLowerCase().includes(filter)) {
+match = true;
+}
+});
+row.style.display = match ? '' : 'none';
+});
+});
+});
+	</script>
+{% endblock %}

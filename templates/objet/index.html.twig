@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Objets
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h2 class="text-center mb-4">Gestion des Objets</h2>
+
+		<div class="mb-3">
+			<a href="{{ path('app_objet_new') }}" class="btn btn-outline-primary">
+				<i class="bi bi-plus-circle me-2"></i>
+				+ Nouveau Objet
+			</a>
+		</div>
+
+		<div class="row">
+			{% for objet in pagination.items %}
+				<div class="col-md-4 mb-4">
+					<div class="card shadow-sm">
+						{% if objet.photoUrl %}
+							<img src="{{ asset('asset/img/pcc-666b1798df68d.png') }}" class="card-img-top" alt="{{ objet.nom }}">
+						{% endif %}
+						<div class="card-body">
+							<h5 class="card-title">{{ objet.nom }}</h5>
+
+							<div class="d-flex align-items-center">
+								<a href="{{ path('app_objet_detail', {'id': objet.id}) }}" class="btn btn-outline-warning">Détails</a>&nbsp;&nbsp;
+
+								{% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+									<a href="{{ path('app_reservation_new', {'id': objet.id}) }}" class="btn btn-outline-success">Réserver</a>
+								{% endif %}
+
+								<form method="post" action="{{ path('app_objet_delete', {'id': objet.id}) }}" class="d-inline delete-form" data-objet="{{ objet.nom }}">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ objet.id) }}">
+									<button type="submit" class="btn btn-outline-danger">Supprimer</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div class="col-12">
+					<div class="alert alert-info text-center">
+						Aucun objet trouvé.
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="pagination justify-content-center mb-3">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+	</div>
+{% endblock %}

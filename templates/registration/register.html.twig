@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription
+{% endblock %}
+
+
+{% block body %}
+	<div class="container mt-5 mb-4">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 col-md-8 col-sm-10 shadow-lg p-4 rounded">
+				<h1 class="text-center mb-2">Créer un compte</h1>
+				{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+				<div class="mb-3">
+					{{ form_label(form.Firstname) }}
+					{{ form_widget(form.Firstname, {'attr': {
+        'class': 'form-control' ~ (not form.Firstname.vars.valid ? ' is-invalid' : ''),
+        'placeholder': 'Votre prénom'
+    }}) }}
+					<div class="invalid-feedback">
+						{{ form_errors(form.Firstname) }}
+					</div>
+				</div>
+
+				<div class="mb-3">
+					{{ form_label(form.Lastname) }}
+					{{ form_widget(form.Lastname, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom'}}) }}
+					<div class="invalid-feedback">
+						Veuillez entrer votre nom.
+					</div>
+				</div>
+
+				<div class="mb-3">
+					{{ form_label(form.adressePostale) }}
+					{{ form_widget(form.adressePostale, {'attr': {'class': 'form-control', 'placeholder': 'Votre adresse postale'}}) }}
+					<div class="invalid-feedback">
+						Veuillez entrer votre adresse postale.
+					</div>
+				</div>
+
+				<div class="mb-3">
+					{{ form_label(form.numtelephone) }}
+					{{ form_widget(form.numtelephone, {'attr': {'class': 'form-control', 'placeholder': 'Votre numéro de téléphone'}}) }}
+					<div class="invalid-feedback">
+						Veuillez entrer votre numéro de téléphone.
+					</div>
+				</div>
+
+				<div class="mb-3">
+					{{ form_label(form.profession) }}
+					{{ form_widget(form.profession, {'attr': {'class': 'form-control', 'placeholder': 'Votre profession'}}) }}
+					<div class="invalid-feedback">
+						Veuillez entrer votre profession.
+					</div>
+				</div>
+
+				<div class="mb-3">
+					{{ form_label(form.email) }}
+					{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Votre email'}}) }}
+					<div class="invalid-feedback">
+						Veuillez entrer une adresse email valide.
+					</div>
+				</div>
+
+				<div class="mb-3">
+					{{ form_label(form.password) }}
+					{{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Votre mot de passe'}}) }}
+					<div class="invalid-feedback">
+						Veuillez entrer un mot de passe valide.
+					</div>
+				</div>
+
+				<div class="d-flex justify-content-center mt-4">
+					<button type="submit" class="btn btn-outline-primary px-4">S'inscrire</button>
+				</div>
+
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}
+{% block javascripts %}
+	<script>
+		// On document ready
+(function () {
+'use strict'
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.querySelectorAll('.needs-validation')
+// Loop over them and prevent submission
+Array.prototype.slice.call(forms).forEach(function (form) {
+form.addEventListener('submit', function (event) {
+if (! form.checkValidity()) {
+event.preventDefault()
+event.stopPropagation()
+}
+form.classList.add('was-validated')
+}, false)
+})
+})()
+	</script>
+{% endblock %}

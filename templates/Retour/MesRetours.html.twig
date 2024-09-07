@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Retours
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h2 class="text-center font-weight-bold mb-4">Mes Retours</h2>
+
+		<div class="card shadow-sm">
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead class="thead-dark">
+							<tr>
+								<th>Matériel</th>
+								<th>État de l'Objet</th>
+								<th>Date retour prévu</th>
+								<th>Date retour réelle</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for retour in retours %}
+								<tr>
+									<td class="align-middle">{{ retour.objet.nom }}</td>
+									<td class="align-middle">
+										<span class="badge {% if retour.objectStatus == 'Bon état' %}badge-success{% else %}badge-danger{% endif %}">
+											{{ retour.objectStatus }}
+										</span>
+									</td>
+									<td class="align-middle">{{ retour.reservation.dateFin|date('d-m-Y') }}</td>
+									<td class="align-middle">
+										{% if retour.returnDate %}
+											{{ retour.returnDate|date('d-m-Y') }}
+										{% else %}
+											<span class="text-muted">Pas encore retourné</span>
+										{% endif %}
+									</td>
+									<td class="align-middle">
+										<form method="post" action="" class="d-inline-block">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ retour.id) }}">
+											<button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
+										</form>
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="5" class="text-center text-muted">Aucun retour trouvé.</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

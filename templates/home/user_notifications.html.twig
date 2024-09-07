@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h2 class="font-weight-normal justify-content-center mt-5" style="text-align: center;">Notifications
+		</h2><br>
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<ul>
+					{% for notification in notifications %}
+						<li>{{ notification.contenu }}
+							-
+							{{ notification.createdAt|date('d-m-Y H:i') }}</li>
+					{% else %}
+						<li>No new notifications</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endblock %}

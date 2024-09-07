@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les Retours
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h2 class="text-center font-weight-bold mb-4">Gérer les Retours</h2>
+
+		<div class="card shadow-sm">
+			<div class="card-body">
+				<table class="table table-hover">
+					<thead class="thead-dark">
+						<tr>
+							<th>Utilisateur</th>
+							<th>Matériel</th>
+							<th>État de l'Objet</th>
+							<th>Date retour prévu</th>
+							<th>Date retour réelle</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for retour in retours %}
+							<tr>
+								<td class="align-middle">{{ retour.reservation.user.firstname }}
+									{{ retour.reservation.user.lastname }}</td>
+								<td class="align-middle">{{ retour.objet.nom }}</td>
+								<td class="align-middle">
+									<span class="badge {% if retour.objectStatus == 'Bon état' %}badge-success{% else %}badge-danger{% endif %}">
+										{{ retour.objectStatus }}
+									</span>
+								</td>
+								<td class="align-middle">{{ retour.reservation.dateFin|date('d-m-Y') }}</td>
+								<td class="align-middle">
+									{% if retour.returnDate %}
+										{{ retour.returnDate|date('d-m-Y') }}
+									{% else %}
+										<span class="text-muted">Pas encore retourné</span>
+									{% endif %}
+								</td>
+								<td class="align-middle">
+									{# You can add action buttons here, such as edit or delete #}
+									{# <a href="" class="btn btn-outline-primary btn-sm">Modifier</a> #}
+										<form method="post" action="" class="d-inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce retour?');"> <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ retour.id) }}">
+										<button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
+									</form>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="6" class="text-center text-muted">Aucun retour trouvé.</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
