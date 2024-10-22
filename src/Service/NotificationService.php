@@ -39,15 +39,17 @@ $this->entityManager->flush();
 
 public function notifyReservationApproval(User $user): void
 {
+    if ($this->security->isGranted(attributes: 'ROLE_USER', subject: $user)) {
+
     
-        if (($this->security->isGranted('ROLE_USER', $user))  ){
             $this->createNotification('Votre réservation a été approuvée.', $user);
         }
     }
 
     public function notifyReservationRejection(User $user): void
     {
-        if (($this->security->isGranted('ROLE_USER', $user)) ) {
+        if ($this->security->isGranted('ROLE_USER', $user)) {
+
             $this->createNotification('Votre réservation a été refusée.', $user);
         }
     }

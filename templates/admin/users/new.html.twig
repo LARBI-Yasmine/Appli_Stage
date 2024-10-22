@@ -1,32 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}new Utilisateur
+{% block title %}Nouveau Utilisateur
 {% endblock %}
 
 {% block body %}
-	<h2 class="font-weight-normal justify-content-center mt-5" style="text-align: center;">Créer un utilisateur
-	</h2>
+	<h2 class="font-weight-normal justify-content-center mt-5" style="text-align: center;">Créer un utilisateur</h2>
 
-	<div class="container mt-5">
-		<div class="row justify-content-center">
+	<div class="container mt-3">
+		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 shadow"><br>
 
 				{{ form_start(form) }}
 
-				{{ form_widget(form) }}
-				<div class="d-flex justify-content-center">
-
+				{{ form_widget(form) }}<br>
+				<div class="d-flex justify-content-center mb-2">
 					<button type="submit" class="btn btn-outline-primary">Enregistrer</button>&nbsp;
-					<a href="{{ path('app_utilisateurs')}}">
+					<a href="{{ path('app_utilisateurs') }}">
 						<button type="button" class="btn btn-outline-dark">Retour</button>
 					</a>
 				</div>
 				<div></div><br>
 				{{ form_end(form) }}
 			</div>
-
 		</div>
 	</div>
-
-
 {% endblock %}

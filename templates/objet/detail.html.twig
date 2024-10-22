@@ -5,17 +5,24 @@
 
 {% block body %}
 	<div class="container my-5">
-		<h2 class="text-center mb-4">{{ objet.nom|capitalize }}</h2>
+		<h2 class="text-center mb-4">{{ objet.nom }}</h2>
 
 		<div class="row justify-content-center">
 			<div class="col-md-8 col-lg-6">
 				<div class="card shadow-sm border-light">
-					<img src="{{ asset('asset/img/pcc-666b1798df68d.png') }}" class="card-img-top" alt="{{ objet.nom }}">
+					<img src="{{ asset('/uploads/photos/' ~ objet.photoUrl) }}" class="card-img-top" alt="{{ objet.nom }}">
 
 					<div class="card-body">
 						<h5 class="card-title">Détails de l'objet</h5>
 
 						<ul class="list-group list-group-flush">
+							{% if objet.description is not empty %}
+								<li class="list-group-item">
+									<strong>Description :</strong>
+									{{ objet.description }}
+								</li>
+							{% endif %}
+
 							<li class="list-group-item">
 								<strong>Numéro de série :</strong>
 								{{ objet.numSerie }}

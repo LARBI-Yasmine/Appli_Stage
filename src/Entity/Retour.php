@@ -27,6 +27,9 @@ class Retour
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
+    #[ORM\Column]
+    private bool $isLate = false;
+
 
 
 
@@ -89,5 +92,28 @@ class Retour
      public function getObjet(): ?Objet
      {
          return $this->reservation ? $this->reservation->getObjet() : null;
+     }
+
+
+
+
+     public function isLate(): bool
+     {
+         // Check if the return date is greater than the end date of the reservation
+         if ($this->returnDate > $this->reservation->getDateFin()) {
+             $this->isLate = true;
+         } else {
+             $this->isLate = false;
+         }
+         
+         // Return the value of isLate
+         return $this->isLate;
+     }
+
+     public function setLate(bool $isLate): static
+     {
+         $this->isLate = $isLate;
+
+         return $this;
      }
 }

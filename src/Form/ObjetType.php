@@ -1,8 +1,9 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Objet;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
@@ -16,138 +17,89 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ObjetType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-      
+public function buildForm(FormBuilderInterface $builder, array $options): void
+{
+$builder
+    ->add('nom', TextType::class, [
+    'label' => 'Nom Objet:',
+    'attr' => ['class' => 'form-control'],
+    'constraints' => [new NotBlank(['message' => 'Le nom ne peut pas être vide.'])]
+    ])
 
-            ->add('nom',TextType::class, [
-                'label' => 'Nom Objet:',
-                'attr' => [
-                    'placeholder' => "Saisir nom de l'objet",
-                    'class' => 'form-control',
-                    
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le nom de l\'objet ne peut pas être vide.',
-                    ]),
-                ],
-                ])
+    ->add('description', TextType::class, [
+    'label' => 'Description:',
+    'attr' => ['class' => 'form-control']
+    ])
 
+    ->add('num_serie', TextType::class, [
+    'label' => 'Numéro de Série:',
+    'attr' => ['class' => 'form-control'],
+    'constraints' => [
+    new NotBlank(['message' => 'Le numéro de série ne peut pas être vide.']),
+    new Length(['min' => 5, 'max' => 40])
+    ]
+    ])
 
-            ->add('num_serie',TextType::class, [
-                'label' => 'Numéro de Série:',
-                'attr' => [
-                    'placeholder' => "Saisir numéro de série",
-                    'class' => 'form-control',
-                    
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le numéro de série ne peut pas être vide.',
-                    ]),
-                new Length([
-                    'min' => 5,
-                    'minMessage' => 'Le numéro de série doit comporter au moins {{ limit }} caractères',
-                    'max' => 40,
-                ])
-            ],
-            ])
+    ->add('etat_usure', TextType::class, [
+    'label' => 'État Usure:',
+    'attr' => ['class' => 'form-control']
+    ])
 
+    ->add('categorie', ChoiceType::class, [
+    'label' => 'Catégorie:',
+    'choices' => [
+    'Sur Place' => 'Sur Place',
+    'Pour Emprunt' => 'Pour Emprunt'
+    ],
+    'attr' => ['class' => 'form-control']
+    ])
 
-           
-            ->add('etat_usure',TextType::class, [
-                'label' => 'Etat Usure:',
-                'attr' => [
-                    'placeholder' => "Saisir Etat d'usure",
-                    'class' => 'form-control',
-                    
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'L\'état d\'usure ne peut pas être vide.',
-                    ]),
-                ],
-                ])
+    ->add('disponibilite', ChoiceType::class, [
+    'label' => 'Disponibilité:',
+    'choices' => [
+    'Disponible' => 'Disponible',
+    'Réservé' => 'Réservé',
+    'Endommagé' => 'Endommagé',
+    'En réparation' => 'En réparation',
+    'Perdu' => 'Perdu'
+    ],
+    'attr' => ['class' => 'form-control']
+    ])
 
-            ->add('categorie', ChoiceType::class, [
-                'label' => 'Categorie:',
-                'choices' => [
-                            '' => '',
-                            'Sur Place' => 'Sur Place',
-                            'Pour Emprunt' => 'Pour Emprunt',
-                            
-                        ],
-                        'attr' => [
-                            'class' => 'form-control',
-                            
-                        ],
-                        'constraints' => [
-                            new NotNull([
-                                'message' => 'Veuillez choisir une catégorie.',
-                            ]),
-                        ],
-                    ])
+    ->add('photo_url', FileType::class, [
+    'label' => 'Photo:',
+    'mapped' => false, // non mappé car géré manuellement
+    'required' => false, // pas obligatoire
+    'constraints' => [
+    new File([
+   
+    'mimeTypes' => ['image/jpeg', 'image/png'],
+    'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG/PNG).'
+    ])
+],
+'attr' => ['class' => 'form-control']
+]);
 
-            ->add('disponibilite', ChoiceType::class, [
-                'label' => 'Disponibilité:',
-                'choices' => [
-                            'Disponible' => 'Disponible',
-                            'Réservé' => 'Réservé',
-                            'Endommagé' => 'Endommagé',
-                            'En réparation' => 'En réparation',
-                            'Perdu' => 'Perdu',
-                            
-                        ],
-                        'attr' => [
-                       
-                            'class' => 'form-control',
-                            
-                        ],
-                        'constraints' => [
-                            new NotNull([
-                                'message' => 'Veuillez choisir une disponibilité.',
-                            ]),
-                        ],
-                    ])
+        // Event listener to handle unchanged fields
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        $objet = $event->getData();
+        $form = $event->getForm();
 
-            ->add('photo_url', FileType::class, [
-                'label' => 'Photo :',
-                'mapped' => false, 
-                'attr' => [
-                  
-                    'class' => 'form-control',
-                    
-                ],
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez télécharger un fichier image valide (JPEG/PNG)',
-                    ])
-                ],
-            ])
-        
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-                'label' => 'Enregistré le:',
-                'attr' => [
-                    'class' => 'form-control',
-                    
-                ],
-                
-            ])
-        ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Objet::class,
+        if ($objet && $objet->getPhotoUrl()) {
+        $form->add('photo_url', FileType::class, [
+        'label' => 'Changer la photo (laissez vide pour conserver l\'actuelle)',
+        'mapped' => false,
+        'required' => false, // Facultatif, si aucune nouvelle image n'est fournie
+        'attr' => ['class' => 'form-control']
         ]);
-    }
+        }
+        });
+}
+
+public function configureOptions(OptionsResolver $resolver): void
+{
+$resolver->setDefaults([
+'data_class' => Objet::class,
+]);
+}
 }
