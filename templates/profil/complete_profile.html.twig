@@ -1,0 +1,67 @@
+{# templates/user/complete_profile.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Compléter le profil
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h1 class="text-center mb-4">Complétez votre profil</h1>
+
+		{{ form_start(form) }}
+
+		<div class="row justify-content-center">
+			<div class="col-lg-6 col-md-8 col-sm-10 shadow-lg p-4 rounded">
+
+				{{ form_label(form.adressePostale) }}
+				{{ form_widget(form.adressePostale, {'attr': {'class': 'form-control', 'placeholder': 'Votre adresse postale'}}) }}
+				{{ form_errors(form.adressePostale) }}
+
+
+				{{ form_label(form.numtelephone) }}
+				{{ form_widget(form.numtelephone, {'attr': {'class': 'form-control', 'placeholder': 'Votre numéro de téléphone'}}) }}
+				{{ form_errors(form.numtelephone) }}
+
+
+				{{ form_label(form.profession) }}
+				{{ form_widget(form.profession, {'attr': {'class': 'form-control', 'placeholder': 'Votre profession'}}) }}
+				{{ form_errors(form.profession) }}
+				<div class="text-center mt-4">
+					<button type="submit" class="btn btn-outline-primary ">Enregistrer</button>
+
+				</div>
+
+			</div>
+
+		</div>
+
+
+		{{ form_end(form) }}
+	</div>
+
+	<style>
+		body {
+			background-color: #f8f9fa; /* Couleur de fond douce */
+		}
+
+		h1 {
+			font-weight: bold; /* Mettre en gras le titre */
+			color: #343a40; /* Couleur sombre pour le texte */
+		}
+
+		.form-control {
+			border-radius: 0.25rem; /* Coins arrondis des champs de formulaire */
+		}
+
+		.btn-primary {
+			background-color: #007bff; /* Couleur du bouton */
+			border-color: #007bff; /* Couleur de la bordure du bouton */
+		}
+
+		.btn-primary:hover {
+			background-color: #0056b3; /* Couleur du bouton au survol */
+			border-color: #0056b3; /* Couleur de la bordure au survol */
+		}
+	</style>
+{% endblock %}

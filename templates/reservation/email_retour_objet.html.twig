@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>Nouveau Retour
+		</h1>
+
+		<p>Bonjour,</p>
+
+		<p>L'utilisateur
+			{{user.firstname}}
+			{{ user.lastname }}
+			a effectué un retour d'objet  Voici les détails :</p>
+
+		<p>
+			<strong>Objet :</strong>
+			{{ reservation.objet.nom }}</p>
+		<p>
+			<strong>Date de Retour :</strong>
+			{{ retour.returnDate|date('d/m/Y') }}</p>
+		<p>
+			<strong>État de l'Objet :</strong>
+			{{ retour.objectStatus }}</p>
+
+		<p>Merci de prendre en compte ce retour.</p>
+
+		<p>Cordialement,</p>
+		<p>L'équipe Appli_Emprunt</p>
+	</body>
+</html>

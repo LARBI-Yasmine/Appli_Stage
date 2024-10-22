@@ -21,11 +21,11 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for reservation in reservations %}
+							{% for reservation in pagination %}
 								<tr>
 									<td>{{ reservation.objet.nom }}</td>
-									<td>{{ reservation.dateDebut|date('d-m-Y') }}</td>
-									<td>{{ reservation.dateFin|date('d-m-Y') }}</td>
+									<td>{{ reservation.datedebut|date('d-m-Y') }}</td>
+									<td>{{ reservation.datefin|date('d-m-Y') }}</td>
 									<td>
 										{% if reservation.statut == 'Demande Approuvée' %}
 											<span class="badge bg-success">{{ reservation.statut }}</span>
@@ -51,7 +51,14 @@
 						</tbody>
 					</table>
 				</div>
+
+
 			</div>
+		</div>
+
+		<!-- Pagination Controls -->
+		<div class="pagination justify-content-center mt-2">
+			{{ knp_pagination_render(pagination) }}
 		</div>
 	</div>
 {% endblock %}

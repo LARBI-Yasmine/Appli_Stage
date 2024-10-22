@@ -17,11 +17,6 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
    
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
       
         // last username entered by the user
@@ -37,63 +32,63 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route('/demander-reinitialisation', name: 'app_request_password')]
-    public function requestPassword(Request $request, UserProviderInterface $userProvider): Response
-    {
-        if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
+    // #[Route('/demander-reinitialisation', name: 'app_request_password')]
+    // public function requestPassword(Request $request, UserProviderInterface $userProvider): Response
+    // {
+    //     if ($request->isMethod('POST')) {
+    //         $email = $request->request->get('email');
 
-             // Vérifiez si l'utilisateur avec cet email existe
-        try {
-            $user = $userProvider->loadUserByIdentifier($email);
-        } catch (\Exception $e) {
-            $user = null;
-        }
-            if ($user) {
-                // Rediriger vers la page de réinitialisation
-                return $this->redirectToRoute('app_reset_password', ['email' => $email]);
-            } else {
-                // Afficher un message d'erreur si l'utilisateur n'existe pas
-                $this->addFlash('error', 'Aucun utilisateur trouvé avec cet email.');
-            }
-        }
+    //          // Vérifiez si l'utilisateur avec cet email existe
+    //     try {
+    //         $user = $userProvider->loadUserByIdentifier($email);
+    //     } catch (\Exception $e) {
+    //         $user = null;
+    //     }
+    //         if ($user) {
+    //             // Rediriger vers la page de réinitialisation
+    //             return $this->redirectToRoute('app_reset_password', ['email' => $email]);
+    //         } else {
+    //             // Afficher un message d'erreur si l'utilisateur n'existe pas
+    //             $this->addFlash('error', 'Aucun utilisateur trouvé avec cet email.');
+    //         }
+    //     }
 
-        return $this->render('security/request_password.html.twig');
-    }
+    //     return $this->render('security/request_password.html.twig');
+    // }
 
-    #[Route('/reinitialiser-mot-de-passe/{email}', name: 'app_reset_password')]
-    public function resetPassword(Request $request, string $email,EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder, UserProviderInterface $userProvider): Response
-    {
-
-
+    // #[Route('/reinitialiser-mot-de-passe/{email}', name: 'app_reset_password')]
+    // public function resetPassword(Request $request, string $email,EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder, UserProviderInterface $userProvider): Response
+    // {
 
 
-         // Vérifiez si l'utilisateur avec cet email existe
-         try {
-            $user = $userProvider->loadUserByIdentifier($email);
-        } catch (\Exception $e) {
-            $user = null;
-        }
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non trouvé.');
-        }
 
-        if ($request->isMethod('POST')) {
-            $newPassword = $request->request->get('password');
 
-            // Encoder le nouveau mot de passe
-            $encodedPassword = $passwordEncoder->hashPassword($user, $newPassword);
-            $user->setPassword($encodedPassword);
+    //      // Vérifiez si l'utilisateur avec cet email existe
+    //      try {
+    //         $user = $userProvider->loadUserByIdentifier($email);
+    //     } catch (\Exception $e) {
+    //         $user = null;
+    //     }
+    //     if (!$user) {
+    //         throw $this->createNotFoundException('Utilisateur non trouvé.');
+    //     }
 
-            // Sauvegarder le nouveau mot de passe dans la base de données
+    //     if ($request->isMethod('POST')) {
+    //         $newPassword = $request->request->get('password');
+
+    //         // Encoder le nouveau mot de passe
+    //         $encodedPassword = $passwordEncoder->hashPassword($user, $newPassword);
+    //         $user->setPassword($encodedPassword);
+
+    //         // Sauvegarder le nouveau mot de passe dans la base de données
          
-            $entityManager->flush();
+    //         $entityManager->flush();
 
-            $this->addFlash('success', 'Votre mot de passe a été réinitialisé avec succès.');
+    //         $this->addFlash('success', 'Votre mot de passe a été réinitialisé avec succès.');
 
-            return $this->redirectToRoute('app_login');
-        }
+    //         return $this->redirectToRoute('app_login');
+    //     }
 
-        return $this->render('security/reset_password.html.twig', ['email' => $email]);
-    }
+    //     return $this->render('security/reset_password.html.twig', ['email' => $email]);
+    // }
 }

@@ -6,31 +6,84 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('email', EmailType::class, [
-            
+        ->add('Firstname',TextType::class, [
+            'label' => 'Prénom',
             'required' => true,
             'attr' => [
-                'class' => 'form-control mb-4'
+                'placeholder' => "Votre nouveau prénom",
+                'class' => 'form-control',
+                
+            ],
+            ])
+        ->add('Lastname',TextType::class, [
+            'label' => 'Nom',
+            'required' => true,
+            'attr' => [
+                'placeholder' => "Votre nouveau nom",
+                'class' => 'form-control',
+                
+            ],
+            ])
+            ->add('adressePostale',TextType::class, [
+                'label' => 'Adresse postale',
+                'required' => true,
+                'attr' => [
+                    'placeholder' => "Votre Adresse postale",
+                    'class' => 'form-control',
+                    
+                ],
+                ])
+                ->add('numtelephone',TextType::class, [
+                    'label' => 'Numéro Télèphone',
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => "Votre Numéro de Télèphone",
+                        'class' => 'form-control',
+                        
+                    ],
+                    ])
+                    ->add('profession',TextType::class, [
+                        'label' => 'Profession',
+                        'required' => true,
+                        'attr' => [
+                            'placeholder' => "Votre profession",
+                            'class' => 'form-control',
+                            
+                        ],
+                        ])
+        ->add('email',EmailType::class,[
+             'attr' => [
+            'class' => 'form-control',
+             ],
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter an email',
+                ]),
+                new Callback([$this, 'validateEmailDomain']),
+
+
             ],
             
+        
         ])
-
+         
         ->add('password', PasswordType::class, [
             'label' => 'Le mot de passe',
             'attr' => [
-                'placeholder' => " Mot de passe",
+                'placeholder' => "Votre nouveau  mot de passe",
                 'class' => 'form-control',
             ],
 
@@ -46,31 +99,7 @@ class UserType extends AbstractType
                 ])
                 ],
             
-            ])
-
-        ->add('roles', ChoiceType::class, [
-            'label' => 'Roles:',
-            'choices' => [
-                        '' => '',
-                        'Utilisateur' => 'ROLE_USER',
-                        'Administrateur' => 'ROLE_ADMIN',
-                        
-                    ],
-                    'attr' => [
-                        'class' => 'form-control',
-                        
-                    ],
-                    'expanded' => false,
-                    'multiple' => true,
-                    'constraints' => [
-                        new NotNull([
-                            'message' => 'Veuillez choisir un role.',
-                        ]),
-                    ],
-                ]);
-
-       
-
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -78,5 +107,13 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);
+    }
+    public function validateEmailDomain($Email, ExecutionContextInterface $context): void
+    {
+        if (!str_ends_with($Email, '@myges.fr')) {
+            $context->buildViolation('Veuillez utiliser une adresse email se terminant par @myges.fr')
+                ->atPath('email');
+               
+        }
     }
 }

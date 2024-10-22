@@ -1,0 +1,115 @@
+<!-- <h1>Nouvelle demande de réservation</h1>
+
+<p>Une nouvelle réservation a été effectuée par
+	{{ reservation.user.firstname }}.</p>
+
+<ul>
+	<li>Objet réservé :
+		{{ reservation.objet.nom }}</li>
+	<li>Date de début :
+		{{ reservation.dateDebut|date('d/m/Y') }}</li>
+	<li>Date de fin :
+		{{ reservation.dateFin|date('d/m/Y') }}</li>
+</ul>
+
+<p>Veuillez vous connecter à l'interface administrateur pour plus de détails.</p>
+
+
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Nouvelle demande de réservation</title>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+		<style>
+			body {
+				background-color: #f8f9fa;
+			}
+			.email-container {
+				max-width: 600px;
+				margin: 20px auto;
+				background-color: #ffffff;
+				border-radius: 8px;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+			}
+			.email-header {
+				background-color: #28a745;
+				color: #ffffff;
+				padding: 20px;
+				text-align: center;
+				font-size: 24px;
+				font-weight: bold;
+			}
+			.email-body {
+				padding: 20px;
+				font-size: 16px;
+			}
+			.email-body ul {
+				padding-left: 20px;
+			}
+			.email-footer {
+				text-align: center;
+				padding: 20px;
+				font-size: 14px;
+				color: #6c757d;
+			}
+			.email-footer a {
+				color: #28a745;
+				text-decoration: none;
+			}
+			.btn-custom {
+				background-color: #28a745;
+				color: #ffffff;
+				text-decoration: none;
+				padding: 10px 20px;
+				border-radius: 5px;
+				font-size: 16px;
+				margin-top: 20px;
+				display: inline-block;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div
+			class="container email-container">
+			<!-- Header -->
+			<div class="row email-header">
+				<div class="col">
+					Nouvelle demande de réservation
+				</div>
+			</div>
+
+			<!-- Body -->
+			<div class="row email-body">
+				<div class="col">
+					<p>Bonjour,</p>
+					<p>Une nouvelle réservation a été effectuée par
+						<strong>{{ reservation.user.firstname }}
+							{{ reservation.user.lastname }}</strong>.</p>
+					<ul class="list-group mb-4">
+						<li class="list-group-item">
+							<strong>Objet réservé :</strong>
+							{{ reservation.objet.nom }}</li>
+						<li class="list-group-item">
+							<strong>Date de début :</strong>
+							{{ reservation.dateDebut|date('d/m/Y') }}</li>
+						<li class="list-group-item">
+							<strong>Date de fin :</strong>
+							{{ reservation.dateFin|date('d/m/Y') }}</li>
+					</ul>
+
+					<p>Veuillez vous connecter à l'interface administrateur pour plus de détails.</p>
+
+				</div>
+			</div>
+
+
+		</div>
+
+	</body>
+</html>

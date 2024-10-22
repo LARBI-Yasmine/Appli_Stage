@@ -11,11 +11,11 @@
 
 		<!-- Notifications -->
 		{% if (app.user) %}
-			<button type="button" class="btn btn-primary position-relative dropdown-toggle" id="notificationDropdown" data-toggle="dropdown" aria-expanded="false">
+			<button type="button" class="btn btn-secondary position-relative dropdown-toggle" id="notificationDropdown" data-toggle="dropdown" aria-expanded="false">
 				Notifications
-				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+				<span class="position-absolute  top-5 start-100 translate-middle badge rounded-pill bg-danger">
 					({{ notifications|length }})
-					<span class="visually-hidden">Non lue(s)</span>
+
 				</span>
 			</button>
 
@@ -72,7 +72,10 @@
 			{% for objet in objets %}
 				<div class="col-4">
 					<div class="card shadow p-3 mt-3 mb-3 bg-body rounded">
-						<img src="{{ asset('asset/img/pcc-666b1798df68d.png') }}" class="card-img-top" width="60rem" height="120rem" alt="{{ objet.nom }}">
+						{% if objet.photoUrl %}
+							<img src="{{ asset('/uploads/photos/' ~ objet.photoUrl) }}" class="card-img-top" alt="{{ objet.nom }}">
+						{% endif %}
+						<!--	<img src="{{ asset('asset/img/pcc-666b1798df68d.png') }}" class="card-img-top" width="60rem" height="120rem" alt="{{ objet.nom }}">-->
 						<div class="card-body">
 							<h4 class="card-title" style="text-align: center;">{{ objet.nom }}&nbsp;&nbsp;</h4><br>
 							<div class="card-text">

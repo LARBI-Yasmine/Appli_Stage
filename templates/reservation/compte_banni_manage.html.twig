@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container my-5">
+		<h2 class="text-center mb-4">Gestion des Comptes Bannis</h2>
+
+		<div class="card shadow-sm border-light">
+			<div class="card-body">
+				<table class="table table-hover align-middle">
+					<thead class="table-dark">
+						<tr>
+							<th>Utilisateur</th>
+							<th>Statut</th>
+							<th class="text-center">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+
+
+						{% for user in pagination %}
+							<tr>
+
+								<td>{{ user.firstname }}
+									{{ user.lastname }}</td>
+								<td>
+									{% if user.isBanned() %}
+										<span class="badge bg-danger" style="font-size: 1.1em; padding: 4px;">Banni</span>
+									{% else %}
+										<span class="badge bg-success">Actif</span>
+									{% endif %}
+								</td>
+								<td class="d-flex justify-content-center">
+									{% if user.isBanned() %}
+										<a href="{{ path('app_admin_unban', {'id': user.id}) }}" class="btn btn-success badge  btn-sm" style="font-size: 1em; padding:2px;">Débannir</a>
+									{% else %}
+										<a href="{{ path('app_admin_banned_users', {'id': user.id}) }}" class="btn btn-danger btn-sm">Bannir</a>
+									{% endif %}
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="6" class="text-center text-muted">Aucun compte banni trouvé</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- Pagination Controls -->
+		<div class="pagination justify-content-center mt-2">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+	</div>
+{% endblock %}

@@ -22,19 +22,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $adressePostale = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer',nullable: true)]
     private ?int $numtelephone = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $profession = null;
 
     #[ORM\Column(length: 255)]
@@ -56,12 +56,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tokenRegistration = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $tokenRegistrationLifeTime = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+    #[ORM\Column]
+    private bool $isBanned =false;
+
+    #[ORM\Column]
+    private int $lateReturnsCount = 0;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection();
         $this->createdAt =(new DateTime('now'));
         $this->isVerified =false;
-        //$this->tokenRegistrationLifeTime = (new DateTime('now + 24 hours' ));
         $this->tokenRegistrationLifeTime = (new DateTime('now'))->add(new DateInterval('PT24H'));
 
     }
@@ -70,9 +84,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->id;
     }
-
-
-
 
 
     public function getFirstname(): ?string
@@ -171,26 +182,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-//     #[ORM\Column(type:"boolean")]
-    
-//    private $isAdmin;
-
-//    public function isAdmin(): bool
-//    {
-//        return $this->isAdmin;
-//    }
-
-//    public function setIsAdmin(bool $isAdmin): self
-//    {
-//        $this->isAdmin = $isAdmin;
-//        return $this;
-//    }
-
-
-
-
-
-
 
     public function eraseCredentials(): void
     {
@@ -225,59 +216,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-     /**
-     * @ORM\Column(type="integer", options={"default": 0})
-     */
-    private $lateReturnsCount = 0;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default": false})
-     */
-    private $isBanned = false;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $tokenRegistration = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $tokenRegistrationLifeTime = null;
-
-    #[ORM\Column]
-    private bool $isVerified = false;
-
-    // Getters and setters for the new fields
-    public function getLateReturnsCount(): int
-    {
-        return $this->lateReturnsCount;
-    }
-
-    public function incrementLateReturnsCount(): self
-    {
-        $this->lateReturnsCount++;
-        return $this;
-    }
-
-    public function resetLateReturnsCount(): self
-    {
-        $this->lateReturnsCount = 0;
-        return $this;
-    }
-
-    public function getIsBanned(): bool
-    {
-        return $this->isBanned;
-    }
-
-    public function banUser(): self
-    {
-        $this->isBanned = true;
-        return $this;
-    }
-
-    public function unbanUser(): self
-    {
-        $this->isBanned = false;
-        return $this;
-    }
 
     public function removeNotification(Notification $notification): self
     {
@@ -326,4 +266,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function isBanned(): bool
+    {
+        return $this->isBanned;
+    }
+
+    public function setIsBanned(bool $isBanned): static
+    {
+        $this->isBanned = $isBanned;
+
+        return $this;
+    }
+
+    public function getLateReturnsCount(): int
+    {
+        return $this->lateReturnsCount;
+    }
+
+    public function setLateReturnsCount(int $lateReturnsCount): static
+    {
+        $this->lateReturnsCount = $lateReturnsCount;
+
+        return $this;
+    }
+    public function incrementLateReturns(): self
+    {
+        $this->lateReturnsCount++;
+        if ($this->lateReturnsCount >= 3) {
+            $this->isBanned = true;  // Ban the user after 3 late returns
+        }
+        return $this;
+    }
+
+    public function unbanUser(): void
+    {      
+      
+        $this->isBanned = false; // Débannir l'utilisateur
+    }
+
+
+    
+    public function resetLateReturnsCount(): void
+    {
+        $this->lateReturnsCount = 0; // Réinitialise le compteur des retards
+    }
 }

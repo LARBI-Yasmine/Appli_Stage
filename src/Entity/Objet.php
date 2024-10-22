@@ -41,9 +41,19 @@ class Objet
     #[ORM\Column(length: 255)]
     private ?string $photo_url = null;
 
-    #[Gedmo\Timestampable(on:"create")]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Gedmo\Timestampable(on: "create")]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
+
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime(); // Automatically set the creation date
+    }
 
     public function getId(): ?int
     {
@@ -131,6 +141,18 @@ class Objet
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

@@ -13,7 +13,7 @@ class ReservationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Reservation::class);
+        parent::__construct($registry, entityClass: Reservation::class);
     }
 
     //    /**
